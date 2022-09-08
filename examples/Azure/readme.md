@@ -1,9 +1,10 @@
 
----
+----
+
 This README is an edit from the original documents below.
 * https://github.com/Azure-Samples/IoTMQTTSample/blob/master/src/MicroPython/readme.md
-* 
----
+
+----
 
 
 # Connect to Azure IoT Hub Using MQTT with Micropython on W5100S-EVB-Pico
