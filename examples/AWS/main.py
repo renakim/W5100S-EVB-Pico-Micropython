@@ -2,6 +2,7 @@ import utime
 from machine import Pin, SPI
 import network
 import json
+import random
 
 from umqtt.simple import MQTTClient
 
@@ -11,7 +12,7 @@ key_file = 'cert/privateKey.key.der'
 
 device_id = '<Device Id>'
 hostname = '<Hostname or Endpoint>'
-mqtt_topic = '<MQTT Topic>'
+mqtt_topic = f'$aws/things/{device_id}/shadow/update'
 
 global client
 
@@ -51,7 +52,7 @@ def init_mqtt_client():
         )
         print("Connecting to MQTT server...")
         client.connect()
-        print("MQTT Client Connected")
+        print(f"MQTT Client Connected to {client.server}")
     except Exception as e:
         print(f'init_mqtt_client error: {e}')
 
@@ -74,12 +75,20 @@ def main():
         client.subscribe(topic=mqtt_topic)
 
         # Publish
-        # Send telemetry
         for i in range(0, 10):
-            msg = json.dumps({'message': f'Message from W5100S-EVB-Pico ({i})'})
+            # Get random values
+            temperature = random.uniform(20, 30)
+            humidity = random.uniform(40, 50)
+            data = {
+                "temperature": temperature,
+                "humidity": humidity
+            }
+            # data = {'message': f'Message from W5100S-EVB-Pico ({i})'}
+
+            msg = json.dumps(data)
             print(f"Sending telemetry: {msg}")
             client.publish(topic=mqtt_topic, msg=msg)
-            utime.sleep(2)
+            utime.sleep(5)
     except Exception as e:
         print(e)
 
