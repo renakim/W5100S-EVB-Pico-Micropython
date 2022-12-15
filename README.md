@@ -10,6 +10,10 @@ For more information, refer to below link.
 
 # W5100S-EVB-Pico Micropython examples
 
+>Default examples is here.
+
+>[Github WIZnet/RP2040-HAT-MicroPython](https://github.com/Wiznet/RP2040-HAT-MicroPython)
+
 ## Azure IoT
 
 * [Azure IoT Hub example](https://github.com/renakim/W5100S-EVB-Pico-Micropython/tree/main/examples/Azure)
@@ -24,3 +28,15 @@ You can refer to the below content for the process of running the example.
 ## AWS IoT
 
 * [AWS IoT example](https://github.com/renakim/W5100S-EVB-Pico-Micropython/tree/main/examples/AWS)
+
+## Related contents
+
+**Azure**
+
+* [Connect to Azure IoT Hub using Micropython on W5100S-EVB-Pico](https://maker.wiznet.io/rena/projects/connect-to-azure-iot-hub-using-micropython-on-w5100s-evb-pico/)
+* [W5100S-EVB-Pico에서 Micropython 및 MQTT를 사용하여 Azure IoT Hub에 연결하기](https://inmile.tistory.com/46)
+
+**AWS**
+
+* [How to connect AWS IoT with Micropython using W5100S-EVB-Pico](https://maker.wiznet.io/rena/projects/how-to-connect-aws-iot-with-micropython-using-w5100s-evb-pico/)
+* [W5100S-EVB-Pico 보드로 AWS IoT Core에 연결해보자 (with Micropython)](https://inmile.tistory.com/49)
