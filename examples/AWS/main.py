@@ -3,18 +3,34 @@ from machine import Pin, SPI
 import network
 import json
 import random
+# import os
+import time
 
-from umqtt.simple import MQTTClient
+# from umqtt.simple import MQTTClient
+from umqtt.robust import MQTTClient
 
 # Certificate path
-cert_file = 'cert/device_certification.crt.der'
+cert_file = 'cert/certificate.crt.der'
 key_file = 'cert/privateKey.key.der'
 
 device_id = '<Device Id>'
 hostname = '<Hostname or Endpoint>'
-mqtt_topic = f'$aws/things/{device_id}/shadow/update'
+
+pub_topic = f'$aws/things/{device_id}/shadow/update'
+sub_topic = f'$aws/things/{device_id}/shadow/accepted'
 
 global client
+
+
+def get_current_time():
+    t = time.localtime()
+    # Tuple: (year, month, mday, hour, minute, second, weekday, yearday)
+    timestr = f'{t[0]:02d}-{t[1]:02d}-{t[2]:02d}T{t[3]:02d}:{t[4]:02d}:{t[5]:02d}'
+    return timestr
+
+
+def newPrint(msg):
+    print(f'[{get_current_time()}] {msg}')
 
 
 # W5x00 init
@@ -24,19 +40,20 @@ def init_ethernet():
     # nic.ifconfig(('192.168.1.20','255.255.255.0','192.168.1.1','8.8.8.8'))
     # Using DHCP
     nic.active(True)
+    nic.ifconfig('dhcp')
+
     while not nic.isconnected():
         utime.sleep(1)
-        # print(nic.regs())
-        print('Connecting ethernet...')
+        # newPrint(nic.regs())
+        newPrint('Connecting ethernet...')
 
-    print(f'Ethernet connected. IP: {nic.ifconfig()}')
+    newPrint(f'Ethernet connected.\nIP: {nic.ifconfig()}')
 
 
 # Init MQTT client
 def init_mqtt_client():
     global client
     try:
-        # Get certificates
         with open(key_file, "rb") as f:
             key = f.read()
         with open(cert_file, "rb") as f:
@@ -50,11 +67,12 @@ def init_mqtt_client():
             keepalive=3600,
             ssl=True
         )
-        print("Connecting to MQTT server...")
+        newPrint("Connecting to MQTT server")
         client.connect()
-        print(f"MQTT Client Connected to {client.server}")
+        newPrint(f"MQTT Client Connected to {client.server}")
+        newPrint(f"Publish Topic: {pub_topic}")
     except Exception as e:
-        print(f'init_mqtt_client error: {e}')
+        newPrint(f'init_mqtt_client error: {e}')
 
 
 def main():
@@ -65,36 +83,39 @@ def main():
     init_mqtt_client()
 
     def callback_handler(topic, message_receive):
-        print(f"Received message: {message_receive}")
+        newPrint("Received message")
+        newPrint(message_receive)
 
     try:
         global client
 
         # Subscribe
         client.set_callback(callback_handler)
-        client.subscribe(topic=mqtt_topic)
+        client.subscribe(topic=sub_topic)
 
         # Publish
-        for i in range(0, 10):
+        repeat = 10
+        for i in range(0, repeat):
             # Get random values
             temperature = random.uniform(20, 30)
             humidity = random.uniform(40, 50)
             data = {
+                "cnt": i,
                 "temperature": temperature,
                 "humidity": humidity
             }
             # data = {'message': f'Message from W5100S-EVB-Pico ({i})'}
 
             msg = json.dumps(data)
-            print(f"Sending telemetry: {msg}")
-            client.publish(topic=mqtt_topic, msg=msg)
-            utime.sleep(5)
-    except Exception as e:
-        print(e)
+            newPrint(f"Sending telemetry: [{i+1}/{repeat}]{msg}")
+            client.publish(topic=pub_topic, msg=msg)
+            utime.sleep(20)
 
-    # # Send a C2D message and wait for it to arrive at the device
-    # print("waiting for message")
-    # client.wait_msg()
+        # Send a C2D message and wait for it to arrive at the device
+        newPrint(f"waiting for message.. Sub Topic: {sub_topic}")
+        client.wait_msg()
+    except Exception as e:
+        newPrint(e)
 
 
 if __name__ == "__main__":

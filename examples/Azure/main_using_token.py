@@ -1,13 +1,17 @@
 import utime
+import time
 from machine import Pin, SPI
 import network
 import json
+import random
 from binascii import a2b_base64, b2a_base64
 
 from hmacSha256 import HMACSha256
 from umqtt.robust import MQTTClient
+from util import init_logger
 
-CONNECTION_STRING = "<Your Device Connection String>"
+#CONNECTION_STRING = "<Your Device Connection String>"
+CONNECTION_STRING = "HostName=WIZnetHub.azure-devices.net;DeviceId=rena-rpi;SharedAccessKey=iASXQ/kePJzE78KjMalGvLgo5NVhwFg6/B559RCH1L0="
 
 DELIMITER = ";"
 VALUE_SEPARATOR = "="
@@ -17,6 +21,17 @@ def parse_connection(connection_string):
     cs_args = connection_string.split(DELIMITER)
     dictionary = dict(arg.split(VALUE_SEPARATOR, 1) for arg in cs_args)
     return dictionary
+
+
+def get_current_time():
+    t = time.localtime()
+    # Tuple: (year, month, mday, hour, minute, second, weekday, yearday)
+    timestr = f'{t[0]:02d}-{t[1]:02d}-{t[2]:02d}T{t[3]:02d}:{t[4]:02d}:{t[5]:02d}'
+    return timestr
+
+
+def newPrint(msg):
+    print(f'[{get_current_time()}] {msg}')
 
 
 global client
@@ -35,6 +50,9 @@ telemetry_topic = f"devices/{device_id}/messages/events/"
 c2d_topic = f"devices/{device_id}/messages/devicebound/#"
 
 
+logger = init_logger('azure_main')
+
+
 # W5x00 init
 def w5x00_init():
     spi = SPI(0, 2_000_000, mosi=Pin(19), miso=Pin(16), sck=Pin(18))
@@ -42,11 +60,12 @@ def w5x00_init():
     # nic.ifconfig(('192.168.1.20','255.255.255.0','192.168.1.1','8.8.8.8'))
     # Using DHCP
     nic.active(True)
+    nic.ifconfig('dhcp')
     while not nic.isconnected():
         utime.sleep(1)
-        print(nic.regs())
+        newPrint(nic.regs())
 
-    print(f'IP info: {nic.ifconfig()}')
+    newPrint(f'IP info: {nic.ifconfig()}')
 
 
 def init_mqtt_client(sas_token_str):
@@ -62,12 +81,12 @@ def init_mqtt_client(sas_token_str):
             keepalive=3600,
             ssl=True
         )
-        print("Connecting to MQTT server...")
+        newPrint("Connecting to MQTT server...")
         client.connect()
-        print(f"MQTT Client Connected to {client.server}")
+        newPrint(f"MQTT Client Connected to {client.server}")
 
     except Exception as e:
-        print(f'init_mqtt_client error: {e}')
+        newPrint(f'init_mqtt_client error: {e}')
 
 
 def generate_device_sas_token(uri, key, expiry):
@@ -98,31 +117,40 @@ def main():
 
     # Get SAS Token
     sas_token_str = generate_device_sas_token(hostname, private_key, 3600)  # 1h
-    # print(sas_token_str)
-    # print(device_id, hostname, username)
+    # newPrint(sas_token_str)
+    # newPrint(device_id, hostname, username)
 
     # Init MQTT client
     init_mqtt_client(sas_token_str)
 
     client.reconnect()
+    newPrint('client reconnect..')
 
     def callback_handler(topic, message_receive):
-        print("Received message")
-        print(message_receive)
+        newPrint("Received message")
+        newPrint(message_receive)
 
     client.set_callback(callback_handler)
     client.subscribe(topic=c2d_topic)
+    newPrint('client subscribe start..')
 
     # Send telemetry
-    for i in range(0, 10):
-        msg = json.dumps({'message': f'Message from W5100S-EVB-Pico ({i})'})
-        print(f"Sending telemetry: {msg}")
+    repeat = 1000
+    for i in range(0, repeat):
+        temperature = random.uniform(20, 30)
+        humidity = random.uniform(40, 50)
+        data = {
+            "temperature": temperature,
+            "humidity": humidity
+        }
+        msg = json.dumps(data)
+        newPrint(f"Sending telemetry: [{i}/{repeat}]{msg}")
         client.publish(topic=telemetry_topic, msg=msg)
-        utime.sleep(2)
+        utime.sleep(3)
 
     # Send a C2D message and wait for it to arrive at the device
-    print("waiting for message")
-    client.wait_msg()
+    # newPrint("waiting for message")
+    # client.wait_msg()
 
 
 if __name__ == "__main__":
