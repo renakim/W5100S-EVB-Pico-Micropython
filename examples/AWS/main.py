@@ -3,16 +3,17 @@ from machine import Pin, SPI
 import network
 import json
 import random
-# import os
 import time
 
-# from umqtt.simple import MQTTClient
 from umqtt.robust import MQTTClient
 
 # Certificate path
 cert_file = 'cert/certificate.crt.der'
 key_file = 'cert/privateKey.key.der'
 
+"""
+Add your AWS resource information
+"""
 device_id = '<Device Id>'
 hostname = '<Hostname or Endpoint>'
 
@@ -104,7 +105,6 @@ def main():
                 "temperature": temperature,
                 "humidity": humidity
             }
-            # data = {'message': f'Message from W5100S-EVB-Pico ({i})'}
 
             msg = json.dumps(data)
             newPrint(f"Sending telemetry: [{i+1}/{repeat}]{msg}")
