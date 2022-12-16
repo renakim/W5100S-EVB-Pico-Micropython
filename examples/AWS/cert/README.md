@@ -11,7 +11,7 @@ cert_file = 'cert/device_cert.crt.der'
 key_file = 'cert/privateKey.key.der'
 ```
 
-## 인증서 변환
+## Convert certificates
 
 Convert the downloaded certificate files to `der` form.
 
