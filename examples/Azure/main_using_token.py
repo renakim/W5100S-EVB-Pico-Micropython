@@ -10,8 +10,7 @@ from hmacSha256 import HMACSha256
 from umqtt.robust import MQTTClient
 from util import init_logger
 
-#CONNECTION_STRING = "<Your Device Connection String>"
-CONNECTION_STRING = "HostName=WIZnetHub.azure-devices.net;DeviceId=rena-rpi;SharedAccessKey=iASXQ/kePJzE78KjMalGvLgo5NVhwFg6/B559RCH1L0="
+CONNECTION_STRING = "<Your Device Connection String>"
 
 DELIMITER = ";"
 VALUE_SEPARATOR = "="
