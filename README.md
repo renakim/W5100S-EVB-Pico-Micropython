@@ -7,8 +7,14 @@ For more information, refer to below link.
 * [Github WIZnet/RP2040-HAT-MicroPython](https://github.com/Wiznet/RP2040-HAT-MicroPython)
 
 
-<!-- Target firmware:  -->
 
+## Using Tistory API with ChatGPT API
+
+* [Tistory automated post with ChatGPT](https://github.com/renakim/W5100S-EVB-Pico-Micropython/tree/main/TistoryWithGPT)
+
+**Contents**
+
+* [ChatGPT API Meets Tistory: The Automated English Learning Blogs](https://maker.wiznet.io/rena/projects/chatgpt-api-meets-tistory%3A-the-automated-english-learning-blogs/?serob=4&serterm=month)
 
 
 ## Using Slack API with ChatGPT API
