@@ -16,6 +16,7 @@ Variables
 """
 # OpenAI API Key
 OPENAI_API_KEY = "<OpenAI API Key>"
+OPENAI_ENDPOINT = "https://api.openai.com/v1/chat/completions"
 
 # Slack API URL
 SLACK_API_URL = "https://slack.com/api/chat.postMessage"
@@ -50,9 +51,6 @@ def init_ethernet():
     print(f'Ethernet connected. IP: {nic.ifconfig()}')
 
 
-api_key = "<OpenAI API Key>"
-openai_endpoint = "https://api.openai.com/v1/chat/completions"
-
 # ! Testing ChatGPT Prompt.. Not completed.
 english_msg_for_slack = "I want you to be an English teacher who helps a study for every time for me(korean). I'll send a message every time with Slack. Make 2 intermediate-level English words, their explanations, and 3 example sentences. Please include a word of encouragement at the end. Write the explanations and example sentences in Korean and English both. Add the appropriate emoji in front of the word so it's visible at a glance. Please set the format as a 'blocks' value for Slack API with markdown list and set the title 'word' and sub-titles are [meaning, example sentence]. Finally, wrap the 'blocks value' with code block. Do not use the variable name. ## RETURN ONLY THE CODE BLOCK. REMOVE PRE-TEXT AND POST-TEXT."
 
@@ -66,10 +64,7 @@ def has_korean(text):
 
 
 def gpt_main(subject, message):
-    api_key = "<Slack API Key>"
-    url = "https://api.openai.com/v1/chat/completions"
-
-    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json; charset=utf-8"}
+    headers = {"Authorization": f"Bearer {OPENAI_API_KEY}", "Content-Type": "application/json; charset=utf-8"}
     data = {
         "model": "gpt-3.5-turbo",
         "messages": [
@@ -78,7 +73,7 @@ def gpt_main(subject, message):
         ]
     }
 
-    response = urequests.post(url, headers=headers, data=json.dumps(data))
+    response = urequests.post(OPENAI_ENDPOINT, headers=headers, data=json.dumps(data))
     if response.status_code == 200:
         response_data = json.loads(response.text)
         # print('response_data:', response_data)
