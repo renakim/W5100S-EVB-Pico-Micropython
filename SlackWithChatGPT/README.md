@@ -1,11 +1,13 @@
 # Slack news bot based on ChatGPT using W5500-EVB-Pico (V2)
 
-This is a project using W5500-EVB-Pico, Slack, and ChatGPT APIs to send messages with sensor data. It includes temperature, humidity, and illuminance sensors, and utilizes NewsAPI.
+This is a project using W5500-EVB-Pico, Slack, and ChatGPT APIs to send messages with sensor data. It includes temperature, humidity, and light sensors, and utilizes NewsAPI.
 
 ## Component
 
 **Hardware**
 * W5500-EVB-Pico
+  * Firmware: [Micropython download: W5500-EVB-Pico](https://micropython.org/download/W5500_EVB_PICO/)
+* Picobricks
 
 **Platform**
 * OpenAI ChatGPT API
@@ -29,6 +31,8 @@ NEWS_API_KEY = "<News API Key>"
 
 
 # English study bot using ChatGPT with Slack (V1)
+
+The project is an English study bot implemented on W5100S-EVB-Pico, using ChatGPT with Slack API.
 
 ## Component
 

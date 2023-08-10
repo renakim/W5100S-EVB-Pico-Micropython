@@ -8,7 +8,7 @@ For more information, refer to below link.
 
 
 
-## Using Tistory API with ChatGPT API
+## Using Tistory API with ChatGPT
 
 * [Tistory automated post with ChatGPT](https://github.com/renakim/W5100S-EVB-Pico-Micropython/tree/main/TistoryWithGPT)
 
@@ -17,13 +17,15 @@ For more information, refer to below link.
 * [ChatGPT API Meets Tistory: The Automated English Learning Blogs](https://maker.wiznet.io/rena/projects/chatgpt-api-meets-tistory%3A-the-automated-english-learning-blogs/?serob=4&serterm=month)
 
 
-## Using Slack API with ChatGPT API
+## Using Slack API with ChatGPT
 
 * [Slack bot with ChatGPT](https://github.com/renakim/W5100S-EVB-Pico-Micropython/tree/main/SlackWithChatGPT)
 
 **Contents**
 
-* [Integrating ChatGPT with Slack API on W5100S-EVB-Pico: Making English Study Bot](https://maker.wiznet.io/rena/projects/integrating-chatgpt-with-slack-api-on-w5100s-evb-pico-board%3A-lets-study-english/?serob=4&serterm=month)
+* [English study bot using ChatGPT with Slack](https://maker.wiznet.io/rena/projects/integrating-chatgpt-with-slack-api-on-w5100s-evb-pico-board%3A-lets-study-english/?serob=4&serterm=month)
+
+* [Slack news bot based on ChatGPT using W5500-EVB-Pico](https://maker.wiznet.io/rena/projects/slack-news-bot-based-on-chatgpt-using-w5500-evb-pico/?serob=4&serterm=month)
 
 ## Using Cloud Service
 
